@@ -1,17 +1,11 @@
-// // authRoutes.ts
+import express from 'express';
+import authRoutes from './authRoutes';
+import postRoutes from './postRoutes';
 
-// import express from 'express';
-// import UserController from '../controllers/userController';
-// import { authenticateToken } from '../middlewares/authMiddleware';
+const router = express.Router();
 
-// const router = express.Router();
+router.use("/auth", authRoutes)
+router.use("/posts", postRoutes)
 
-// router.post('/register', UserController.register);
-// router.post('/login', UserController.login);
 
-// // Exemplo de rota protegida utilizando o middleware de autenticação
-// router.get('/rota-protegida', authenticateToken, (req, res) => {
-//   res.status(200).json({ message: 'Esta é uma rota protegida' });
-// });
-
-// export default router;
+export default router;

@@ -1,6 +1,6 @@
 import express from 'express';
-import connectDatabase from './database/database'
-import authRoutes from './routes/authRoutes';
+import connectDatabase from './database/database';
+import router from 'routes/router';
 
 
 const app = express();
@@ -9,9 +9,7 @@ connectDatabase();
 
 // Middlewares
 app.use(express.json());
-
-// Rotas de autenticação
-app.use('/auth', authRoutes);
+app.use(router);
 
 
 const PORT = process.env.PORT || 3000;
