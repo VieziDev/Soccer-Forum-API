@@ -12,20 +12,19 @@ declare global {
   }
 }
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
+export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    res.status(401).json({ message: 'Token de autenticação não fornecido' });
-  } else {
-    jwt.verify(token, process.env.SECRET_KEY as string, (err, user) => {
-      if (err) {
-        res.status(403).json({ message: 'Token inválido' });
-      } else {
-        req.user = user;
-        next();
-      }
-    });
+    return res.status(401).json({ message: 'Token não fornecido' });
   }
+
+  jwt.verify(token, process.env.SECRET_KEY as string, (err: any, user: any) => {
+    if (err) {
+      return res.status(403).json({ message: 'Token inválido ou expirado' });
+    }
+    req.user = user;
+    next();
+  });
 };

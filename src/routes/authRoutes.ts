@@ -14,10 +14,10 @@ const router = express.Router();
 const authController = new AuthController();
 
 // Rota de registro de usuário
-router.post('/register', authController.registrarUsuario);
+router.post('/register', authController.registerUser);
 
 // Rota de login de usuário
-router.post('/login', authController.logarUsuario);
+router.post('/login', authController.loginUser);
 
 router.get('/rota-protegida', authenticateToken, (req, res) => {
   res.status(200).json({ message: 'Esta é uma rota protegida' });

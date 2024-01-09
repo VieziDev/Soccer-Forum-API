@@ -3,14 +3,19 @@
 import { Request, Response } from 'express';
 import { Types } from 'mongoose';
 import PostService from '../services/postService';
+import jwt from 'jsonwebtoken';
+import 'dotenv/config'
+
+require('dotenv').config()
 
 const postService = new PostService();
 
 export default class PostController {
   async createPost(req: Request, res: Response): Promise<void> {
     try {
-      const { title, content, author } = req.body;
-      const newPost = await postService.createPost(title, content, new Types.ObjectId(author));
+      const { title, content } = req.body;
+      const userID = req.user.id;
+      const newPost = await postService.createPost(title, content, new Types.ObjectId(userID));
       res.status(201).json(newPost);
     } catch (e) {
       const error = e as Error;

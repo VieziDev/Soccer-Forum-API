@@ -6,7 +6,7 @@ import UserService from '../services/authService';
 const userService = new UserService();
 
 export default class AuthController {
-  async registrarUsuario(req: Request, res: Response): Promise<void> {
+  async registerUser(req: Request, res: Response): Promise<void> {
     try {
       const { username, email, password } = req.body;
       await userService.registerUser(username, email, password);
@@ -17,7 +17,7 @@ export default class AuthController {
     }
   }
 
-  async logarUsuario(req: Request, res: Response): Promise<void> {
+  async loginUser(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
       const accessToken = await userService.loginUser(email, password);

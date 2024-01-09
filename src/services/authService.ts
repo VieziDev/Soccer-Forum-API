@@ -23,7 +23,7 @@ export default class UserService {
       return null;
     }
 
-    const accessToken = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY as string);
+    const accessToken = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY as string, { expiresIn: '1h' });
     return accessToken;
   }
 }
