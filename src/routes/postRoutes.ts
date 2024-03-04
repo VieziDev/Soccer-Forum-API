@@ -10,7 +10,7 @@ const commentController = new CommentController();
 const likeController = new LikeController();
 
 // CRUD Posts   
-router.get('/', authenticateToken, postController.listPost);
+router.get('/', postController.listPost);
 router.post('/create', authenticateToken, postController.createPost);
 router.put('/update/:id', authenticateToken, postController.updatePost);
 router.delete('/delete/:id', authenticateToken, postController.deletePost);

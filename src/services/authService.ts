@@ -26,4 +26,10 @@ export default class UserService {
     const accessToken = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY as string, { expiresIn: '1h' });
     return accessToken;
   }
+
+  async checkIfUserExists(email: string): Promise<boolean> {
+    const existingUser = await User.findOne({ email });
+
+    return !!existingUser;
+  }
 }

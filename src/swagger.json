@@ -1,1 +1,618 @@
-{}
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de forúm esportivo",
+    "description": "Essa API tem como objetivo a manipulação das postagens e autenticação no forúm",
+    "termsOfService": "http://localhost:3000/terms",
+    "contact": {
+      "email": "matheusviezi@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/v1",
+      "description": "API de teste"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Registra um novo usuário",
+        "description": "Essa rota será responsável por registrar novos usuários",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "username": "New user name",
+                    "email": "user@example.com",
+                    "password": "supermegadificulpassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error: User already exists"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Autentica um usuário existente",
+        "description": "Esta rota é responsável por autenticar um usuário existente no fórum.",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "matheusviezi@gmail.com",
+                    "password": "2402math"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful"
+                    },
+                    "accessToken": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "get": {
+        "summary": "Lista de todas as postagens",
+        "description": "Essa rota será responsável por listar todos as postagens",
+        "tags": [
+          "Posts"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized"
+          }
+        }
+      }
+    },
+    "/posts/create": {
+      "post": {
+        "summary": "Cria uma nova postagem",
+        "description": "Esta rota permite que um usuário autenticado crie uma nova postagem no fórum.",
+        "tags": [
+          "Posts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "content"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/posts/update/{id}": {
+      "put": {
+        "summary": "Atualiza uma postagem existente",
+        "description": "Esta rota permite que um usuário autenticado atualize uma postagem existente no fórum.",
+        "tags": [
+          "Posts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID da postagem a ser atualizada",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Postagem atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Postagem não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/posts/{postId}/comments": {
+      "get": {
+        "summary": "Obtém todos os comentários de uma postagem",
+        "description": "Esta rota permite que os usuários obtenham todos os comentários de uma postagem específica.",
+        "tags": [
+          "Comments"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "required": true,
+            "description": "ID da postagem para a qual os comentários serão recuperados",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/posts/{postId}/comment": {
+      "post": {
+        "summary": "Cria um novo comentário",
+        "description": "Esta rota permite que um usuário autenticado crie um novo comentário em uma postagem específica.",
+        "tags": [
+          "Comments"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "required": true,
+            "description": "ID da postagem para a qual os comentários serão recuperados",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "content"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comentário criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/posts/comments/{id}": {
+      "put": {
+        "summary": "Edita um comentário existente",
+        "description": "Esta rota permite que um usuário autenticado edite um comentário existente.",
+        "tags": [
+          "Comments"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID do comentário a ser editado",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newContent": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "newContent"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comentário editado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comentário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Exclui um comentário existente",
+        "description": "Esta rota permite que um usuário autenticado exclua um comentário existente.",
+        "tags": [
+          "Comments"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID do comentário a ser excluído",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comentário excluído com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Comentário deletado com sucesso"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comentário não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/posts/{postId}/like": {
+      "post": {
+        "summary": "Gerencia o like em uma postagem",
+        "description": "Esta rota permite que um usuário autenticado gerencie o like em uma postagem específica.",
+        "tags": [
+          "Likes"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "postId",
+            "required": true,
+            "description": "ID da postagem para a qual o like será gerenciado",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Like removido com sucesso"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Like adicionado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Like adicionado com sucesso"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Post": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "_v": {
+            "type": "integer"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "usernamde": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer"
+          }
+        }
+      },
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "postId": {
+            "type": "string"
+          },
+          "_v": {
+            "type": "integer"
+          }
+        }
+      },
+      "Like": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string",
+            "description": "ID do usuário que deu o like"
+          },
+          "post": {
+            "type": "string",
+            "description": "ID da postagem que recebeu o like"
+          },
+          "_v": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

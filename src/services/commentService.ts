@@ -16,7 +16,7 @@ export default class CommentService {
   }
 
   async deleteComment(commentId: string): Promise<CommentDocument | null> {
-    return CommentModel.findByIdAndDelete(commentId, () => { }).exec();
+    return CommentModel.findByIdAndDelete(commentId).exec() as unknown as CommentDocument | null;;
   }
 
 }
