@@ -15,7 +15,7 @@
       "description": "API de teste"
     },
     {
-      "url": "blog-api-production-cad4.up.railway.app/v1",
+      "url": "https://blog-api-production-cad4.up.railway.app/v1",
       "description": "API de produção"
     }
   ],
