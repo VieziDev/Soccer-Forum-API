@@ -2,7 +2,7 @@ import express, { response } from 'express';
 import connectDatabase from './database/database';
 import router from 'routes/router';
 import swaggerUi from "swagger-ui-express";
-import swaggerDocs from './swagger.json';
+import swaggerDocs from '../swagger.json';
 
 const app = express();
 

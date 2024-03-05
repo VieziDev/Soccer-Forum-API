@@ -13,6 +13,10 @@
     {
       "url": "http://localhost:3000/v1",
       "description": "API de teste"
+    },
+    {
+      "url": "blog-api-production-cad4.up.railway.app/v1",
+      "description": "API de produção"
     }
   ],
   "paths": {
