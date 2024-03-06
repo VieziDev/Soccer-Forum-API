@@ -262,6 +262,42 @@
         }
       }
     },
+    "/posts/delete/{id}": {
+      "delete": {
+        "summary": "Deleta uma postagem existente",
+        "description": "Esta rota permite que um usuário delete uma postagem existente no fórum.",
+        "tags": [
+          "Posts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID da postagem a ser deletada",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Postagem deletada com sucesso"
+          },
+          "404": {
+            "description": "Postagem não encontrada"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
     "/posts/{postId}/comments": {
       "get": {
         "summary": "Obtém todos os comentários de uma postagem",
